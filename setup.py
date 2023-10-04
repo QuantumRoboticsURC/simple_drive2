@@ -13,13 +13,13 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='shikur_orin',
-    maintainer_email='quantumrobotics.itesm@gmail.com',
+    maintainer='santiago',
+    maintainer_email='santiago@todo.todo',
     description='TODO: Package description',
     license='TODO: License declaration',
     tests_require=['pytest'],
     entry_points={
-        'console_scripts': [
+        'console_scripts': ['simple_drive_teleop=simple_drive2.drive_teleop:main'
         ],
     },
 )
