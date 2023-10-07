@@ -1,0 +1,22 @@
+Axis:
+[0] Joy left en y
+[1] Joy left en x
+[2] gatillo izquierdo 1 ,-1
+[3] Joy right en y
+[4] Joy right en x
+[5] gatillo derechi 1, -1
+[6] D pad en y
+[7] D pad en x
+
+Button:
+[0] A
+[1] B
+[2] x
+[3] y
+[4] Lb
+[5] Rb
+[6] select
+[7] start
+[8] xbox Button
+[9] Joy left button
+[10] Joy right button

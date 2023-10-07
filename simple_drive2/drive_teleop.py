@@ -16,7 +16,7 @@ class Simple_Drive(Node):
         self.subscriber_joy = self.create_subscription(Joy,"joy", self.callbackjoy,10)
 
 
-        self.buttons, self.axes = [0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0]
+        self.buttons, self.axes = [0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0]
         self.velocity=0.5
         self.twist=Twist()
 
