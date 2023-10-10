@@ -17,9 +17,9 @@ class Simple_Drive(Node):
 
 
         self.buttons, self.axes = [0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0]
-        self.velocity=0.5
+        self.velocity=0.33
         self.twist=Twist()
-
+        self.deathZone = 0.3
 
 
     def callbackjoy(self,data):
@@ -38,27 +38,32 @@ class Simple_Drive(Node):
         elif angulo<0:
             angulo=0
         servo.moveTimeWrite(angulo)
+
     def control(self):
+        def calcVel(joyIn):
+            return (1.29*joyIn)-0.29
+        
         if self.buttons[3]:
             self.velocity=1
         elif self.buttons[2] or self.buttons[1]:
             self.velocity=0.5
         elif self.buttons[0]:
             self.velocity=0.33
-        elif self.axes[1]>=0.3 or self.axes[1]<=-0.3:
-            self.twist.linear.x=np.sign(self.axes[1])*self.velocity
-            print(self.twist)
-        elif self.axes[0]>=0.3 or self.axes[0]<=-0.3:
-            self.twist.angular.z=np.sign(self.axes[0])*self.velocity
+        
+        elif self.axes[1]>=self.deathZone or self.axes[1]<=-self.deathZone:
+            self.twist.linear.x=calcVel(self.axes[1])*self.velocity
+            #print(self.twist)
+        
+        elif self.axes[0]>=self.deathZone or self.axes[0]<=-self.deathZone:
+            self.twist.angular.z=calcVel(self.axes[0])*self.velocity
+        
         else:
             self.twist.linear.x=0.0
             self.twist.angular.z=0.0
+        
         self.publisher_vel.publish(self.twist)
         print("Twist publicado")
             
-            
-
-    
 
 def main(args=None):
     rclpy.init(args=args)
