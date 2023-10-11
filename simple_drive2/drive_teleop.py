@@ -12,15 +12,16 @@ class Simple_Drive(Node):
         super().__init__('simple_drive_teleop')
         
         self.publisher_vel = self.create_publisher(Twist, 'cmd_vel', 10)
+        #self.publisher_angl = self.create_publisher(Float64, 'angulos', 10)
         self.timer=self.create_timer(0.05,self.control)
         self.subscriber_joy = self.create_subscription(Joy,"joy", self.callbackjoy,10)
-
 
         self.buttons, self.axes = [0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0]
         self.velocity=0.33
         self.twist=Twist()
         self.deathZone = 0.3
 
+        self.axes[1] 
 
     def callbackjoy(self,data):
         self.buttons = list(data.buttons [:])
