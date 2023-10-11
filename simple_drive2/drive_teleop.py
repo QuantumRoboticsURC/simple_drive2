@@ -62,7 +62,7 @@ class Simple_Drive(Node):
             self.twist.angular.z=0.0
         
         self.publisher_vel.publish(self.twist)
-        print("Twist publicado")
+        print("Twist publicado")#xd
             
 
 def main(args=None):
