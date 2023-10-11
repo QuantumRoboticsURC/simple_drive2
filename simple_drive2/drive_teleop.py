@@ -42,7 +42,11 @@ class Simple_Drive(Node):
 
     def control(self):
         def calcVel(joyIn):
-            return (1.29*joyIn)-0.29
+            if joyIn > 0:
+                return (1.29*joyIn)-0.29
+            elif joyIn < 0:
+                return (1.29*joyIn)+0.29
+            
         
         if self.buttons[3]:
             self.velocity=1
@@ -57,6 +61,8 @@ class Simple_Drive(Node):
         
         elif self.axes[0]>=self.deathZone or self.axes[0]<=-self.deathZone:
             self.twist.angular.z=calcVel(self.axes[0])*self.velocity
+
+        
         
         else:
             self.twist.linear.x=0.0
