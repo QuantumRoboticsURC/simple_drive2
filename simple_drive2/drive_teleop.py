@@ -1,3 +1,8 @@
+# Code design by Quantum Robotics, author <quantumrobotics.itesm@gmail.com
+#
+# Mainteiners: Eduardo Chavez <eduardochavezmartin10@gmail.com>
+#              Cesar FLores <A01751101@tec.mx>
+
 import rclpy
 from math import *
 from std_msgs.msg import *
@@ -10,42 +15,24 @@ import numpy as np
 class Simple_Drive(Node):
     def __init__(self):
         super().__init__('simple_drive_teleop')
-        
         self.publisher_vel = self.create_publisher(Twist, 'cmd_vel', 10)
-        #self.publisher_angl = self.create_publisher(Float64, 'angulos', 10)
-        self.timer=self.create_timer(0.05,self.control)
+        self.publisher_angl = self.create_publisher(Float64, 'angle_swr', 10)
         self.subscriber_joy = self.create_subscription(Joy,"joy", self.callbackjoy,10)
-
+        self.subscriber_joy
+        self.angle_srw = Float64()
         self.buttons, self.axes = [0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0]
-        self.velocity=0.33
+        self.velocity=0.33  
         self.twist=Twist()
-        #self.anglesRad = 0.0
-        #self.angles = Float64()
+        self.timer = self.create_timer(0.05, self.control)
+     
 
     def callbackjoy(self,data):
         self.buttons = list(data.buttons [:])
         self.axes = list(data.axes [:])
 
-    def my_map(self,x,in_min,in_max,out_min,out_max):
-        x = int(x)
-        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
-
-    def angulos(self,servo,data,min,max):
-        grados=degrees(data)
-        angulo=int(self.my_map(grados,-90,90,min,max))
-        if angulo>240:
-            angulo=240
-        elif angulo<0:
-            angulo=0
-        servo.moveTimeWrite(angulo)
-
     def control(self):
-        """def calcVel(joyIn):
-            if joyIn < 0:
-                return (1.29*joyIn)+0.29
-            elif joyIn > 0:
-                return (1.29*joyIn)-0.29"""
-        
+    
+        #Velocity selector
         if self.buttons[3]:
             self.velocity=1
         elif self.buttons[2] or self.buttons[1]:
@@ -53,9 +40,8 @@ class Simple_Drive(Node):
         elif self.buttons[0]:
             self.velocity=0.33
         
-        elif self.axes[1]!=0 and self.axes[0] == 0:
+        if self.axes[1]!=0 and self.axes[0] == 0:
             self.twist.linear.x=self.axes[1]*self.velocity
-            #print(self.twist)
         
         elif self.axes[0] !=0:
             self.twist.angular.z=self.axes[0]*self.velocity
@@ -69,11 +55,12 @@ class Simple_Drive(Node):
         
         else:
             self.twist.linear.x=0.0
+            self.twist.linear.y=0.0
             self.twist.angular.z=0.0
-            self.angles = 0.0
+            self.angle_srw.data = 0.0
         
         self.publisher_vel.publish(self.twist)
-        #self.publisher_angl.publish(self.angles)
+        self.publisher_angl.publish(self.angle_srw)
         #print("Twist publicado")#xd
             
 
