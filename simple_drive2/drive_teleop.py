@@ -1,7 +1,7 @@
 import rclpy
 from math import *
 from std_msgs.msg import *
-from geometry_msgs.msg import Twist, Quaternion
+from geometry_msgs.msg import Twist
 from sensor_msgs.msg import Joy
 from numpy import*
 from rclpy.node import Node
@@ -12,22 +12,15 @@ class Simple_Drive(Node):
         super().__init__('simple_drive_teleop')
         
         self.publisher_vel = self.create_publisher(Twist, 'cmd_vel', 10)
-        self.publisher_angl = self.create_publisher(Quaternion, 'angulos', 10)
+        #self.publisher_angl = self.create_publisher(Float64, 'angulos', 10)
         self.timer=self.create_timer(0.05,self.control)
         self.subscriber_joy = self.create_subscription(Joy,"joy", self.callbackjoy,10)
 
         self.buttons, self.axes = [0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0]
         self.velocity=0.33
         self.twist=Twist()
-        self.deathZone = 0.3
-        self.angles = Quaternion()
-
-        self.angles.x = 0.0
-        self.angles.y = 0.0
-        self.angles.z = 0.0
-        self.angles.w = 0.0
-
-        self.axes[1] 
+        #self.anglesRad = 0.0
+        #self.angles = Float64()
 
     def callbackjoy(self,data):
         self.buttons = list(data.buttons [:])
@@ -47,11 +40,11 @@ class Simple_Drive(Node):
         servo.moveTimeWrite(angulo)
 
     def control(self):
-        def calcVel(joyIn):
+        """def calcVel(joyIn):
             if joyIn < 0:
                 return (1.29*joyIn)+0.29
             elif joyIn > 0:
-                return (1.29*joyIn)-0.29
+                return (1.29*joyIn)-0.29"""
         
         if self.buttons[3]:
             self.velocity=1
@@ -60,21 +53,27 @@ class Simple_Drive(Node):
         elif self.buttons[0]:
             self.velocity=0.33
         
-        elif (self.axes[1]>=self.deathZone or self.axes[1]<=-self.deathZone) and (self.axes[0] == 0):
-            self.twist.linear.x=calcVel(self.axes[1])*self.velocity
+        elif self.axes[1]!=0 and self.axes[0] == 0:
+            self.twist.linear.x=self.axes[1]*self.velocity
             #print(self.twist)
         
-        elif self.axes[0]>=self.deathZone or self.axes[0]<=-self.deathZone:
-            self.twist.angular.z=calcVel(self.axes[0])*self.velocity
+        elif self.axes[0] !=0:
+            self.twist.angular.z=self.axes[0]*self.velocity
 
-        #elif Xime
+        #elif 1 Xime
+        
+        #elif 2 Xime
+
+        #elif (self.axes[3] !=0 or self.axes[4] != 0) and self.axes[0] == 0 and self.axes[6] == 0 and self.axes[7] == 0:
+            #self.anglesRad = (np.arctan2(self.axes[3],self.axes[4])+2*math.pi)%2*math.pi
         
         else:
             self.twist.linear.x=0.0
             self.twist.angular.z=0.0
+            self.angles = 0.0
         
         self.publisher_vel.publish(self.twist)
-        self.publisher_angl.publish(self.angles)
+        #self.publisher_angl.publish(self.angles)
         #print("Twist publicado")#xd
             
 

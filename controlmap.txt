@@ -1,15 +1,13 @@
-//programar botones faltantes
-//checar angulos muertos del joystick [0][1] para que no se interfieran
 
 Axis:
-[0] Joy left en y   //Falta publicar angulo float 64
+[0] Joy left en y   //ya
 [1] Joy left en x   //ya
 [2] gatillo izquierdo 1 ,-1    //no relevante
 [3] Joy right en y     //Publica angulo float64
 [4] Joy right en x     //Publica angulo float64
 [5] gatillo derechi 1, -1   //no relevante
-[6] D pad en y     //Publica twitst.linear.x <-(Xime) y angulo float64
-[7] D pad en x     //Publica twitst.linear.x <-(Xime) y angulo float64 
+[6] D pad en y     //Publica twitst.linear.y <-(Xime)
+[7] D pad en x     //Publica twitst.linear.y <-(Xime)
 
 Button:
 [0] A   //ya
