@@ -23,8 +23,7 @@ class Simple_Drive(Node):
         self.buttons, self.axes = [0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0]
         self.velocity=0.33  
         self.twist=Twist()
-        self.timer = self.create_timer(0.05, self.control)
-     
+        self.anglesRad = 0.0
 
     def callbackjoy(self,data):
         self.buttons = list(data.buttons [:])
@@ -57,11 +56,11 @@ class Simple_Drive(Node):
             self.twist.linear.x= 0  
             self.twist.angular.z= 0  
 
-         #if self.axes[4] !=0 and self.axes[3] !=0 
+        #if self.axes[4] !=0 and self.axes[3] !=0 
             #self.
 
-        #elif (self.axes[3] !=0 or self.axes[4] != 0) and self.axes[0] == 0 and self.axes[6] == 0 and self.axes[7] == 0:
-            #self.anglesRad = (np.arctan2(self.axes[3],self.axes[4])+2*math.pi)%2*math.pi
+        elif (self.axes[3] !=0 or self.axes[4] != 0) and self.axes[0] == 0 and self.axes[6] == 0 and self.axes[7] == 0:
+            self.anglesRad = (np.arctan2(self.axes[3],self.axes[4])+2*math.pi)%2*math.pi
         
         else:
             self.twist.linear.x=0.0
