@@ -1,3 +1,5 @@
+import os
+from glob import glob
 from setuptools import setup
 
 package_name = 'simple_drive2'
@@ -7,6 +9,7 @@ setup(
     version='0.0.0',
     packages=[package_name],
     data_files=[
+        (os.path.join('share', package_name, 'launch'), glob(os.path.join('launch', '*launch.[pxy][yma]*'))),
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
@@ -23,3 +26,4 @@ setup(
         ],
     },
 )
+

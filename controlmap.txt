@@ -1,0 +1,24 @@
+
+Axis:
+[0] Joy left en y   //ya
+[1] Joy left en x   //ya
+[2] gatillo izquierdo 1 ,-1    //no relevante
+[3] Joy right en y     //Publica angulo float64
+[4] Joy right en x     //Publica angulo float64
+[5] gatillo derechi 1, -1   //no relevante
+[6] D pad en y     //Publica twitst.linear.y <-(Xime)
+[7] D pad en x     //Publica twitst.linear.y <-(Xime)
+
+Button:
+[0] A   //ya
+[1] B   //no relevante
+[2] x   //ya
+[3] y   //ya
+[4] Lb  //no relevante
+[5] Rb  //no relevante
+[6] select  //no relevante
+[7] start   //no relevante
+[8] xbox Button    //no relevante
+[9] Joy left button    //no relevante
+[10] Joy right button     //no relevante
+
