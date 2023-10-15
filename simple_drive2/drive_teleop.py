@@ -4,7 +4,7 @@
 #              Cesar FLores <A01751101@tec.mx>
 
 import rclpy
-from math import *
+import math
 from std_msgs.msg import *
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import Joy
@@ -24,7 +24,7 @@ class Simple_Drive(Node):
         self.velocity=0.33  
         self.twist=Twist()
         self.timer = self.create_timer(0.05, self.control)
-     
+        self.anglesRad = 0.0
 
     def callbackjoy(self,data):
         self.buttons = list(data.buttons [:])
@@ -40,28 +40,37 @@ class Simple_Drive(Node):
         elif self.buttons[0]:
             self.velocity=0.33
         
-        if self.axes[1]!= 0 and self.axes[0] ==0:
+        if self.axes[1]!= 0 and abs(self.axes[0]) <=0.2 and self.axes[3] == 0 and self.axes[4] == 0:
             self.twist.linear.x=self.axes[1]*self.velocity
-            self.twist.linear.y= 0  
-            self.twist.angular.z= 0 
+            self.twist.linear.y= 0.0  
+            self.twist.angular.z= 0.0
+            self.angle_srw.data = 0.0
 
-        elif self.axes[0] !=0:
+
+        elif self.axes[0] !=0 and abs(self.axes[1]) <=0.2:
             self.twist.angular.z=self.axes[0]*self.velocity
-            self.twist.linear.y= 0  
-            self.twist.linear.x= 0  
+            self.twist.linear.y= 0.0 
+            self.twist.linear.x= 0.0  
+            self.angle_srw.data = 0.0
 
         #elif 1 Xime
-        elif self.axes[6] !=0 :
+        elif self.axes[6] !=0 and self.axes[0] ==0 and self.axes[1] == 0:
 
             self.twist.linear.y=self.axes[6]*self.velocity
-            self.twist.linear.x= 0  
-            self.twist.angular.z= 0  
+            self.twist.linear.x= 0.0
+            self.twist.angular.z= 0.0 
+            self.angle_srw.data = 0.0
 
-         #if self.axes[4] !=0 and self.axes[3] !=0 
-            #self.
+        elif (self.axes[3] !=0 or self.axes[4] != 0) and self.axes[0] == 0 and self.axes[6] == 0 and self.axes[7] == 0:
+            self.twist.linear.x=self.axes[1]*self.velocity
+            self.anglesRad = math.degrees(np.arctan2(self.axes[3],self.axes[4]))# +2*math.pi)%2*math.pi
+            if(self.anglesRad>= -90 and self.anglesRad<= 90):
+                self.angle_srw.data = self.anglesRad
+            elif(self.anglesRad >90):
+                self.angle_srw.data = 90.0
+            else: #elif(self.anglesRad < 90):
+                self.angle_srw.data = -90.0
 
-        #elif (self.axes[3] !=0 or self.axes[4] != 0) and self.axes[0] == 0 and self.axes[6] == 0 and self.axes[7] == 0:
-            #self.anglesRad = (np.arctan2(self.axes[3],self.axes[4])+2*math.pi)%2*math.pi
         
         else:
             self.twist.linear.x=0.0
@@ -71,7 +80,6 @@ class Simple_Drive(Node):
         
         self.publisher_vel.publish(self.twist)
         self.publisher_angl.publish(self.angle_srw)
-        #print("Twist publicado")#xd
             
 
 def main(args=None):
