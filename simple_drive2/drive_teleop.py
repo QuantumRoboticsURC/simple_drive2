@@ -25,6 +25,7 @@ class Simple_Drive(Node):
         self.twist=Twist()
         self.timer = self.create_timer(0.05, self.control)
         self.anglesRad = 0.0
+        self.flag=0
 
     def callbackjoy(self,data):
         self.buttons = list(data.buttons [:])
@@ -45,6 +46,9 @@ class Simple_Drive(Node):
             self.twist.linear.y= 0.0  
             self.twist.angular.z= 0.0
             self.angle_srw.data = 0.0
+            self.publisher_vel.publish(self.twist)
+            self.publisher_angl.publish(self.angle_srw)
+            self.flag=0
 
 
         elif self.axes[0] !=0 and abs(self.axes[1]) <=0.2:
@@ -52,6 +56,9 @@ class Simple_Drive(Node):
             self.twist.linear.y= 0.0 
             self.twist.linear.x= 0.0  
             self.angle_srw.data = 0.0
+            self.publisher_vel.publish(self.twist)
+            self.publisher_angl.publish(self.angle_srw)
+            self.flag=0
 
         #elif 1 Xime
         elif self.axes[6] !=0 and self.axes[0] ==0 and self.axes[1] == 0:
@@ -60,6 +67,9 @@ class Simple_Drive(Node):
             self.twist.linear.x= 0.0
             self.twist.angular.z= 0.0 
             self.angle_srw.data = 0.0
+            self.publisher_vel.publish(self.twist)
+            self.publisher_angl.publish(self.angle_srw)
+            self.flag=0
 
         elif (self.axes[3] !=0 or self.axes[4] != 0) and self.axes[0] == 0 and self.axes[6] == 0 and self.axes[7] == 0:
             self.twist.linear.x=self.axes[1]*self.velocity
@@ -70,6 +80,9 @@ class Simple_Drive(Node):
                 self.angle_srw.data = 90.0
             else: #elif(self.anglesRad < 90):
                 self.angle_srw.data = -90.0
+            self.publisher_vel.publish(self.twist)
+            self.publisher_angl.publish(self.angle_srw)
+            self.flag=0
 
         
         else:
@@ -77,9 +90,10 @@ class Simple_Drive(Node):
             self.twist.linear.y=0.0
             self.twist.angular.z=0.0
             self.angle_srw.data = 0.0
-        
-        self.publisher_vel.publish(self.twist)
-        self.publisher_angl.publish(self.angle_srw)
+            self.flag+=1
+            if self.flag==1:
+                self.publisher_vel.publish(self.twist)
+                self.publisher_angl.publish(self.angle_srw)
             
 
 def main(args=None):
