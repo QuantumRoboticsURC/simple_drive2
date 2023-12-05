@@ -28,7 +28,7 @@ class Simple_Drive(Node):
         self.subscriber_webInt = self.create_subscription(Bool,"SD_WI", self.callbackwi,10)
         self.subscriber_webInt
         self.angle_srw = Float64()
-        self.active = True
+        self.active = False
         # el inicio de las posiciones de los botones
         self.buttons, self.axes = [0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0]
         # velocidad mínima
@@ -45,7 +45,8 @@ class Simple_Drive(Node):
 
     # funcion para obtener valor de web interface
     def callbackwi(self,data):
-        self.active = bool(data)
+        self.active = bool(data.data)
+        print(self.active)
 
     def control(self):
         if self.active:
@@ -113,7 +114,6 @@ class Simple_Drive(Node):
                 if self.flag==1:    
                     self.publisher_vel.publish(self.twist)
                     self.publisher_angl.publish(self.angle_srw)
-                
 # args debe tener cierto valor para funcionar
 # este código le da instrucciones al Simple_Drive
 def main(args=None):
