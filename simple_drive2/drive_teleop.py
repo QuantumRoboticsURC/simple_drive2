@@ -24,7 +24,11 @@ class Simple_Drive(Node):
         # create_subscription manda un mensaje a otro lado 
         self.subscriber_joy = self.create_subscription(Joy,"joy", self.callbackjoy,10)
         self.subscriber_joy
+        # crear suscripcion a un mensaje booleano de web interface
+        self.subscriber_webInt = self.create_subscription(Bool,"SD_WI", self.callbackwi,10)
+        self.subscriber_webInt
         self.angle_srw = Float64()
+        self.active = True
         # el inicio de las posiciones de los botones
         self.buttons, self.axes = [0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0]
         # velocidad mínima
@@ -39,72 +43,77 @@ class Simple_Drive(Node):
         self.buttons = list(data.buttons [:])
         self.axes = list(data.axes [:])
 
+    # funcion para obtener valor de web interface
+    def callbackwi(self,data):
+        self.active = bool(data)
+
     def control(self):
+        if self.active:
     # botones asignados a la velicidad, baja, media y alta
         #Velocity selector
-        if self.buttons[3]:
-            self.velocity=1
-        elif self.buttons[2] or self.buttons[1]:
-            self.velocity=0.5
-        elif self.buttons[0]:
-            self.velocity=0.33
+            if self.buttons[3]:
+                self.velocity=1
+            elif self.buttons[2] or self.buttons[1]:
+                self.velocity=0.5
+            elif self.buttons[0]:
+                self.velocity=0.33
 
-        # condiciones  generales del movimiento de los botones
-        if self.axes[1]!= 0 and abs(self.axes[0]) <=0.2 and self.axes[3] == 0 and self.axes[4] == 0:
-            self.twist.linear.x=self.axes[1]*self.velocity
-            self.twist.linear.y= 0.0  
-            self.twist.angular.z= 0.0
-            self.angle_srw.data = 0.0
-            self.publisher_vel.publish(self.twist)
-            self.publisher_angl.publish(self.angle_srw)
-            self.flag=0
-
-
-        elif self.axes[0] !=0 and abs(self.axes[1]) <=0.2:
-            self.twist.angular.z=self.axes[0]*self.velocity
-            self.twist.linear.y= 0.0 
-            self.twist.linear.x= 0.0  
-            self.angle_srw.data = 0.0
-            self.publisher_vel.publish(self.twist)
-            self.publisher_angl.publish(self.angle_srw)
-            self.flag=0
-
-        #elif 1 Xime
-        elif self.axes[6] !=0 and self.axes[0] ==0 and self.axes[1] == 0:
-
-            self.twist.linear.y=self.axes[6]*self.velocity
-            self.twist.linear.x= 0.0
-            self.twist.angular.z= 0.0 
-            self.angle_srw.data = 0.0
-            self.publisher_vel.publish(self.twist)
-            self.publisher_angl.publish(self.angle_srw)
-            self.flag=0
-
-        elif (self.axes[3] !=0 or self.axes[4] != 0) and self.axes[0] == 0 and self.axes[6] == 0 and self.axes[7] == 0:
-            self.twist.linear.x=self.axes[1]*self.velocity
-            self.anglesRad = math.degrees(np.arctan2(self.axes[3],self.axes[4]))# +2*math.pi)%2*math.pi
-            if(self.anglesRad>= -90 and self.anglesRad<= 90):
-                self.angle_srw.data = self.anglesRad
-            elif(self.anglesRad >90):
-                self.angle_srw.data = 90.0
-            else: #elif(self.anglesRad < 90):
-                self.angle_srw.data = -90.0
-            self.publisher_vel.publish(self.twist)
-            self.publisher_angl.publish(self.angle_srw)
-            self.flag=0
-
-        
-        else:
-            self.twist.linear.x=0.0
-            self.twist.linear.y=0.0
-            self.twist.angular.z=0.0
-            self.angle_srw.data = 0.0
-            # publica los ángulos de las llantas
-            self.flag+=1
-            if self.flag==1:    
+            # condiciones  generales del movimiento de los botones
+            if self.axes[1]!= 0 and abs(self.axes[0]) <=0.2 and self.axes[3] == 0 and self.axes[4] == 0:
+                self.twist.linear.x=self.axes[1]*self.velocity
+                self.twist.linear.y= 0.0  
+                self.twist.angular.z= 0.0
+                self.angle_srw.data = 0.0
                 self.publisher_vel.publish(self.twist)
                 self.publisher_angl.publish(self.angle_srw)
+                self.flag=0
+
+
+            elif self.axes[0] !=0 and abs(self.axes[1]) <=0.2:
+                self.twist.angular.z=self.axes[0]*self.velocity
+                self.twist.linear.y= 0.0 
+                self.twist.linear.x= 0.0  
+                self.angle_srw.data = 0.0
+                self.publisher_vel.publish(self.twist)
+                self.publisher_angl.publish(self.angle_srw)
+                self.flag=0
+
+            #elif 1 Xime
+            elif self.axes[6] !=0 and self.axes[0] ==0 and self.axes[1] == 0:
+
+                self.twist.linear.y=self.axes[6]*self.velocity
+                self.twist.linear.x= 0.0
+                self.twist.angular.z= 0.0 
+                self.angle_srw.data = 0.0
+                self.publisher_vel.publish(self.twist)
+                self.publisher_angl.publish(self.angle_srw)
+                self.flag=0
+
+            elif (self.axes[3] !=0 or self.axes[4] != 0) and self.axes[0] == 0 and self.axes[6] == 0 and self.axes[7] == 0:
+                self.twist.linear.x=self.axes[1]*self.velocity
+                self.anglesRad = math.degrees(np.arctan2(self.axes[3],self.axes[4]))# +2*math.pi)%2*math.pi
+                if(self.anglesRad>= -90 and self.anglesRad<= 90):
+                    self.angle_srw.data = self.anglesRad
+                elif(self.anglesRad >90):
+                    self.angle_srw.data = 90.0
+                else: #elif(self.anglesRad < 90):
+                    self.angle_srw.data = -90.0
+                self.publisher_vel.publish(self.twist)
+                self.publisher_angl.publish(self.angle_srw)
+                self.flag=0
+
             
+            else:
+                self.twist.linear.x=0.0
+                self.twist.linear.y=0.0
+                self.twist.angular.z=0.0
+                self.angle_srw.data = 0.0
+                # publica los ángulos de las llantas
+                self.flag+=1
+                if self.flag==1:    
+                    self.publisher_vel.publish(self.twist)
+                    self.publisher_angl.publish(self.angle_srw)
+                
 # args debe tener cierto valor para funcionar
 # este código le da instrucciones al Simple_Drive
 def main(args=None):
