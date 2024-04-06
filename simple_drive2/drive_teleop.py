@@ -82,7 +82,7 @@ class Simple_Drive(Node):
             #elif 1 Xime
             elif self.axes[6] !=0 and self.axes[0] ==0 and self.axes[1] == 0:
 
-                self.twist.linear.y=self.axes[6]*self.velocity
+                self.twist.linear.y= 0.165
                 self.twist.linear.x= 0.0
                 self.twist.angular.z= 0.0 
                 self.angle_srw.data = 0.0
@@ -103,7 +103,6 @@ class Simple_Drive(Node):
                 self.publisher_angl.publish(self.angle_srw)
                 self.flag=0
 
-            
             else:
                 self.twist.linear.x=0.0
                 self.twist.linear.y=0.0
@@ -114,6 +113,7 @@ class Simple_Drive(Node):
                 if self.flag==1:    
                     self.publisher_vel.publish(self.twist)
                     self.publisher_angl.publish(self.angle_srw)
+                    
 # args debe tener cierto valor para funcionar
 # este código le da instrucciones al Simple_Drive
 def main(args=None):
