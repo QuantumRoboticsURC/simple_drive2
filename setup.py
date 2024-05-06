@@ -22,7 +22,8 @@ setup(
     license='TODO: License declaration',
     tests_require=['pytest'],
     entry_points={
-        'console_scripts': ['simple_drive_teleop=simple_drive2.drive_teleop:main'
+        'console_scripts': ['simple_drive_teleop=simple_drive2.drive_teleop:main',
+                            'simple_drive_tank=simple_drive2.drive_teleop_tank:main'
         ],
     },
 )
