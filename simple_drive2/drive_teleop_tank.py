@@ -31,7 +31,7 @@ class Simple_Drive(Node):
         # el inicio de las posiciones de los botones
         self.buttons, self.axes = [0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0]
         # velocidad mínima
-        self.velocity=0.33  
+        self.velocity=3 
         self.twist=Twist()
         # tiempo que necesita ṕara realizarse
         self.timer = self.create_timer(0.05, self.control)
@@ -59,11 +59,11 @@ class Simple_Drive(Node):
                 self.velocity=3
 
             # condiciones  generales del movimiento de los botones
-            left_speed= self.axes[1]/self.velocity
-            right_speed= self.axes[4]/self.velocity
+            left_speed= self.axes[4]/self.velocity
+            right_speed= self.axes[1]/self.velocity
             
-            linear_vel  = (left_speed + right_speed) / 2.0 # (m/s)
-            angular_vel  = (left_speed - right_speed) / 2.0 # (rad/s)
+            linear_vel  = (left_speed + right_speed)/2 # (m/s)
+            angular_vel  = (left_speed - right_speed)/2 # (rad/s)
             
             self.twist.linear.x=linear_vel
             self.twist.angular.z=angular_vel
