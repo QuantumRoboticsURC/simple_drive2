@@ -48,26 +48,26 @@ class Simple_Drive(Node):
         print(self.active)
 
     def control(self):
-        if self.active:
+        #if self.active:
     # botones asignados a la velicidad, baja, media y alta
         #Velocity selector
-            if self.buttons[3]:
-                self.velocity=1
-            elif self.buttons[2] or self.buttons[1]:
-                self.velocity=2
-            elif self.buttons[0]:
-                self.velocity=3
+        if self.buttons[3]:
+            self.velocity=1
+        elif self.buttons[2] or self.buttons[1]:
+            self.velocity=2
+        elif self.buttons[0]:
+            self.velocity=3
 
-            # condiciones  generales del movimiento de los botones
-            left_speed= self.axes[4]/self.velocity
-            right_speed= self.axes[1]/self.velocity
-            
-            linear_vel  = (left_speed + right_speed)/2 # (m/s)
-            angular_vel  = (left_speed - right_speed)/2 # (rad/s)
-            
-            self.twist.linear.x=linear_vel
-            self.twist.angular.z=angular_vel
-            self.publisher_vel.publish(self.twist)
+        # condiciones  generales del movimiento de los botones
+        left_speed= self.axes[4]/self.velocity
+        right_speed= self.axes[1]/self.velocity
+        
+        linear_vel  = (left_speed + right_speed)/2 # (m/s)
+        angular_vel  = (left_speed - right_speed)/2 # (rad/s)
+        
+        self.twist.linear.x=linear_vel
+        self.twist.angular.z=angular_vel
+        self.publisher_vel.publish(self.twist)
             
             
             
