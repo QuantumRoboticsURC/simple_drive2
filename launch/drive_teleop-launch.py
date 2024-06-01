@@ -11,8 +11,8 @@ def generate_launch_description():
         launch.actions.DeclareLaunchArgument('joy_dev', default_value='/dev/input/js0'),
         Node(
             package='simple_drive2',
-            executable='simple_drive_teleop',
-            name='simple_drive_teleop'
+            executable='simple_drive_teleop2',
+            name='simple_drive_teleop2'
         ),
 
         launch_ros.actions.Node(

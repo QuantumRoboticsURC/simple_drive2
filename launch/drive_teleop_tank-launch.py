@@ -11,8 +11,8 @@ def generate_launch_description():
         launch.actions.DeclareLaunchArgument('joy_dev', default_value='/dev/input/js0'),
         Node(
             package='simple_drive2',
-            executable='simple_drive_tank',
-            name='simple_drive_tank'
+            executable='simple_drive_tank2',
+            name='simple_drive_tank2'
         ),
 
         launch_ros.actions.Node(

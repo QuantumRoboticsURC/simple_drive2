@@ -23,7 +23,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': ['simple_drive_teleop=simple_drive2.drive_teleop:main',
-                            'simple_drive_tank=simple_drive2.drive_teleop_tank:main'
+                            'simple_drive_tank=simple_drive2.drive_teleop_tank:main',
+                            'simple_drive_tank2=simple_drive2.drive_teleop_tank2:main'
         ],
     },
 )
