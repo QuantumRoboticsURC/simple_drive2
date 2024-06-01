@@ -21,7 +21,7 @@ def generate_launch_description():
             name='joy_node',
             parameters=[{
                 'dev': joy_dev,
-                'deadzone': 0.3,
+                'deadzone': 0.1,
                 'autorepeat_rate': 20.0,
             }])
     ])
