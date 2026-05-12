@@ -19,7 +19,7 @@ class Simple_Drive(Node):
         # super (función de herencia, necesita de _init_  y el simple_drive_teleop para funcionar)
         super().__init__('simple_drive_teleop')
         # publican un mensaje y crean un publicador
-        self.publisher_vel = self.create_publisher(Twist, 'cmd_vel', 10)
+        self.publisher_vel = self.create_publisher(Twist, 'cmd_vel/arm', 10)
         self.publisher_angl = self.create_publisher(Float64, 'angle_swr', 10)
         # create_subscription manda un mensaje a otro lado 
         self.subscriber_joy = self.create_subscription(Joy,"joy", self.callbackjoy,10)
@@ -28,7 +28,7 @@ class Simple_Drive(Node):
         self.subscriber_webInt = self.create_subscription(Bool,"SD_WI", self.callbackwi,10)
         self.subscriber_webInt
         self.angle_srw = Float64()
-        self.active = False
+        self.active = True
         # el inicio de las posiciones de los botones
         self.buttons, self.axes = [0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0]
         # velocidad mínima

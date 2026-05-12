@@ -59,8 +59,8 @@ class Simple_Drive(Node):
             self.velocity=3
 
         # condiciones  generales del movimiento de los botones
-        left_speed= self.axes[4]/self.velocity
-        right_speed= self.axes[1]/self.velocity
+        left_speed= self.axes[4]
+        right_speed= self.axes[1]
         
         linear_vel  = (left_speed + right_speed)/2 # (m/s)
         angular_vel  = (left_speed - right_speed)/2 # (rad/s)
